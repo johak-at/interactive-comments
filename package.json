@@ -4,6 +4,7 @@
   "description": "Tell me what this app is about...",
   "private": true,
   "scripts": {
+    "api": "json-server -H 0.0.0.0 -p 3333 -w dummy-data/data.json",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
@@ -37,6 +38,7 @@
     "@vueuse/nuxt": "^9.10.0",
     "autoprefixer": "^10.0.2",
     "daisyui": "^2.46.0",
+    "json-server": "^0.17.2",
     "pinia": "^2.0.28",
     "postcss": ">=8.3.3 <9.0.0",
     "sass": "^1.56.2",
