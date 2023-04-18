@@ -8,6 +8,15 @@ import { storeToRefs } from "pinia";
 const store = useStore();
 const name = storeToRefs(store).name;
 
+//add the data of data.json to a new arraw using onmounted() and log the date of the comments
+
+const data = ref([]);
+onMounted(async () => {
+  const res = await fetch("data.json");
+  data.value = await res.json();
+});
+console.log(data);
+
 const newName = ref("");
 function setName() {
   store.name = newName.value;
