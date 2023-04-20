@@ -7,14 +7,7 @@ const store = useStore();
 const name = storeToRefs(store).name;
 const daisyTheme = storeToRefs(store).daisyTheme;
 useHead({
-  script: [
-    {
-      async: true,
-      crossorigin: "anonymous",
-      type: "module",
-      src: "https://unpkg.com/@ionic/pwa-elements@latest/dist/ionicpwaelements/ionicpwaelements.esm.js",
-    },
-  ],
+  script: [],
 });
 </script>
 
