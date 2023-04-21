@@ -15,6 +15,13 @@ onMounted(async () => {
 });
 console.log(data);
 
+//add a like counter to the comments
+
+const likes = ref(0);
+function addLike() {
+  data.score.value++;
+}
+
 const newName = ref("");
 function setName() {
   store.name = newName.value;
@@ -26,9 +33,42 @@ const comments = ref([{ name: "John", comment: "Hello" }]);
 </script>
 
 <template>
-  <div class="">
-    <h1 class="text-black">{{ comments[0].comment }}</h1>
-    <div text-black>{{ data }}</div>
+  <div class="flex flex-col items-center">
+    <div
+      v-for="(comment, index) in data.comments"
+      :key="comment.id"
+      text-black
+      pa-10
+      w-2xl
+      text-center
+      text-left
+    >
+      <div class="flex flex-col px-2 w-20 items-center">
+        <button>+</button> {{ comment.score }}
+        <button>-</button>
+      </div>
+      <div class="flex flex-row">
+        <div>
+          <div><img src="" alt="" /></div>
+          <div></div>
+        </div>
+        <div class="pl-2">{{ comment.content }}</div>
+      </div>
+
+      <!-- <div v-for="reply in comment.replies" class="pl-15 py-4">
+        <div class="flex flex-col px-2 w-20 items-center">
+          <button>+</button> {{ reply.score }}
+          <button>-</button>
+        </div>
+        <div class="flex flex-row">
+          <div>
+            <div><img src="" alt="" /></div>
+            <div></div>
+          </div>
+          <div class="pl-2">{{ reply.content }}</div>
+        </div>
+      </div> -->
+    </div>
   </div>
 </template>
 
