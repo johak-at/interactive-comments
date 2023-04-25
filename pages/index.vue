@@ -42,14 +42,19 @@ const comments = ref([{ name: "John", comment: "Hello" }]);
       w-2xl
       text-center
       text-left
+      flex
+      flex-row
     >
-      <div class="flex flex-col px-2 w-20 items-center">
+      <div class="flex flex-col justify-center px-2 w-20 items-center">
         <button>+</button> {{ comment.score }}
         <button>-</button>
       </div>
-      <div class="flex flex-row">
+      <div class="flex flex-col">
         <div>
-          <div><img src="" alt="" /></div>
+          <div>
+            <!-- load the profile pictures from the json file -->
+            <img :src="comment.user.image.webp" class="w-12 pl-2" />
+          </div>
           <div></div>
         </div>
         <div class="pl-2">{{ comment.content }}</div>
