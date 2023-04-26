@@ -7,6 +7,6 @@
 
 <style scoped>
 .main {
-  background-color: #f5f5f5;
+  background-color: #f5f6fa;
 }
 </style>
