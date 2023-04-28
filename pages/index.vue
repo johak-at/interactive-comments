@@ -6,15 +6,16 @@ import { Icon } from "@iconify/vue";
 // useStore() and name handling:
 const store = useStore();
 const name = storeToRefs(store).name;
+const data = storeToRefs(store).data;
 
 //add the data of data.json to a new arraw using onmounted() and log the date of the comments
 
-const data = ref([]);
-onMounted(async () => {
-  const res = await fetch("data.json");
-  data.value = await res.json();
-});
-console.log(data);
+// const data = ref([]);
+// onMounted(async () => {
+//   const res = await fetch("data.json");
+//   data.value = await res.json();
+// });
+// console.log(data);
 
 //add a like counter to the comments
 
@@ -23,14 +24,32 @@ function addLike() {
   data.score.value++;
 }
 
+function addComments() {
+  console.log("test");
+  data.comments.value.push({
+    id: Date.now().toString(16),
+    content: commentInput.value,
+    createdAt: new Date().toLocaleString(),
+    score: 0,
+    user: {
+      username: "User",
+      image: {
+        png: "image-amyrobson.png",
+        webp: "image-amyrobson.webp",
+      },
+      username: "User",
+    },
+    replies: [],
+  });
+  commentInput.value = "";
+  console.log("test");
+}
+
 const newName = ref("");
 function setName() {
   store.name = newName.value;
   newName.value = "";
 }
-
-// object for comments
-const comments = ref([{ name: "John", comment: "Hello" }]);
 </script>
 
 <template>
@@ -119,8 +138,19 @@ const comments = ref([{ name: "John", comment: "Hello" }]);
       <div
         class="text-black pa-10 text-center text-left flex flex-row rounded-lg mt-3 mb-15 bg-white min-h-35 items-center justify-between"
       >
-        <input type="text" placeholder="Add a comment..." class="" />
-        <button class="btn bg-blue-900 w-23 text-size-4.25">Send</button>
+        <textarea
+          name="comments"
+          id="commentInput"
+          placeholder="Add a comment..."
+          maxrows="6"
+          class="text"
+        ></textarea>
+        <button
+          class="btn bg-blue-900 w-23 text-size-4.25"
+          @click="addComments"
+        >
+          Send
+        </button>
       </div>
     </div>
   </div>
@@ -129,5 +159,15 @@ const comments = ref([{ name: "John", comment: "Hello" }]);
 <style>
 * {
   /* border: 1px solid red; */
+}
+.text {
+  border: 1px solid #c8ccda;
+  border-radius: 10px;
+  resize: none;
+  width: 400px;
+  height: 100px;
+  margin-left: 25px;
+  padding-left: 10px;
+  padding-top: 10px;
 }
 </style>
