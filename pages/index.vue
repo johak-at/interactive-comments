@@ -6,44 +6,98 @@ import { Icon } from "@iconify/vue";
 // useStore() and name handling:
 const store = useStore();
 const name = storeToRefs(store).name;
-const data = storeToRefs(store).data;
+const server = "http://localhost:3333/comments";
+// const data = storeToRefs(store).data;
 
-//add the data of data.json to a new arraw using onmounted() and log the date of the comments
+//add the data of data.json to a new array using onMounted() and log the date of the comments
 
-// const data = ref([]);
-// onMounted(async () => {
-//   const res = await fetch("data.json");
-//   data.value = await res.json();
-// });
-// console.log(data);
+const data = ref([]);
+onMounted(async () => {
+  getComments();
+});
+
+async function getComments() {
+  const response = await fetch(server);
+  data.value = await response.json();
+  console.log(data.value);
+}
+
+//make a function to add comments to the database using post
+
+async function addComments() {
+  fetch(server, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      content: commentInput.value,
+      createdAt: new Date().toLocaleString(),
+      score: 0,
+      user: {
+        username: "User",
+        image: {
+          png: "image-amyrobson.png",
+          webp: "image-amyrobson.webp",
+        },
+        username: "User",
+      },
+      replies: [],
+    }),
+  });
+  commentInput.value = "";
+  getComments();
+}
+
+//make a function to be able to like comments when clicking the + icon use the id of the icon
+
+async function addLike(id) {
+  getComments();
+  fetch(`${server}/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      score: data.value.find((comment) => comment.id === id).score + 1,
+    }),
+  });
+}
+async function DisLike(id) {
+  getComments();
+  fetch(`${server}/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      score: data.value.find((comment) => comment.id === id).score - 1,
+    }),
+  });
+}
 
 //add a like counter to the comments
 
-const likes = ref(0);
-function addLike() {
-  data.score.value++;
-}
-
-function addComments() {
-  console.log("test");
-  data.comments.value.push({
-    id: Date.now().toString(16),
-    content: commentInput.value,
-    createdAt: new Date().toLocaleString(),
-    score: 0,
-    user: {
-      username: "User",
-      image: {
-        png: "image-amyrobson.png",
-        webp: "image-amyrobson.webp",
-      },
-      username: "User",
-    },
-    replies: [],
-  });
-  commentInput.value = "";
-  console.log("test");
-}
+// function addComments() {
+//   console.log("test");
+//   data.comments.value.push({
+//     id: Date.now().toString(16),
+//     content: commentInput.value,
+//     createdAt: new Date().toLocaleString(),
+//     score: 0,
+//     user: {
+//       username: "User",
+//       image: {
+//         png: "image-amyrobson.png",
+//         webp: "image-amyrobson.webp",
+//       },
+//       username: "User",
+//     },
+//     replies: [],
+//   });
+//   commentInput.value = "";
+//   console.log("test");
+// }
 
 const newName = ref("");
 function setName() {
@@ -55,7 +109,7 @@ function setName() {
 <template>
   <div class="flex items-center flex-col text-black">
     <div class="flex flex-col w-2xl">
-      <div v-for="(comment, index) in data.comments" :key="comment.id">
+      <div v-for="(comment, index) in data" :key="comment.id">
         <div
           class="text-black pa-10 text-center text-left flex flex-row rounded-lg my-3 bg-white min-h-45 items-center"
         >
@@ -63,9 +117,17 @@ function setName() {
             class="flex flex-col justify-center px-2 w-18 items-center h-27 rounded-lg mr-3 bg-[#f5f6fa] text-blue-900 font-semibold"
           >
             <button class="space-y-3.5">
-              <Icon text-5 icon="ic:round-plus" />
+              <Icon
+                text-5
+                icon="ic:round-plus"
+                @click="addLike(comment.id), getComments()"
+              />
               <p>{{ comment.score }}</p>
-              <Icon text-5 icon="ic:round-minus" />
+              <Icon
+                text-5
+                icon="ic:round-minus"
+                @click="DisLike(comment.id), getComments()"
+              />
             </button>
           </div>
           <div class="flex flex-col text-left">
@@ -103,9 +165,17 @@ function setName() {
             class="flex flex-col justify-center px-2 w-18 items-center h-27 rounded-lg mr-3 bg-[#f5f6fa] text-blue-900 font-semibold"
           >
             <button class="space-y-3.5">
-              <Icon text-5 icon="ic:round-plus" />
+              <Icon
+                text-5
+                icon="ic:round-plus"
+                @click="addLike(comment.replies.id)"
+              />
               <p>{{ reply.score }}</p>
-              <Icon text-5 icon="ic:round-minus" />
+              <Icon
+                text-5
+                icon="ic:round-minus"
+                @click="DisLike(comment.replies.id)"
+              />
             </button>
           </div>
           <div class="flex flex-col text-left">
@@ -144,6 +214,7 @@ function setName() {
           placeholder="Add a comment..."
           maxrows="6"
           class="text"
+          @keyup.enter="addComments"
         ></textarea>
         <button
           class="btn bg-blue-900 w-23 text-size-4.25"
