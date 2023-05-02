@@ -77,6 +77,20 @@
         "username": "amyrobson"
       },
       "replies": []
+    },
+    {
+      "content": "Hallo!",
+      "createdAt": "today",
+      "score": "999",
+      "user": {
+        "image": {
+          "png": "http://robohash.org/seiwaldm",
+          "webp": "http://robohash.org/seiwaldm"
+        },
+        "username": "seiwaldm"
+      },
+      "replies": [],
+      "id": 6
     }
   ]
 }

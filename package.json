@@ -4,7 +4,7 @@
   "description": "Tell me what this app is about...",
   "private": true,
   "scripts": {
-    "api": "json-server -H 0.0.0.0 -p 3333 -w dummy-data/data.json",
+    "api": "json-server -H 0.0.0.0 -p 3333 -w public/data.json",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
