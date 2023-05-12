@@ -25,6 +25,10 @@ async function getComments() {
 //make a function to add comments to the database using post
 
 async function addComments() {
+  if (commentInput.value === "") {
+    return;
+  }
+
   fetch(server, {
     method: "POST",
     headers: {
@@ -46,13 +50,13 @@ async function addComments() {
     }),
   });
   commentInput.value = "";
+  delay(5000);
   getComments();
 }
 
 //make a function to be able to like comments when clicking the + icon use the id of the icon
 
 async function addLike(id) {
-  getComments();
   fetch(`${server}/${id}`, {
     method: "PATCH",
     headers: {
@@ -62,9 +66,9 @@ async function addLike(id) {
       score: data.value.find((comment) => comment.id === id).score + 1,
     }),
   });
+  getComments();
 }
 async function DisLike(id) {
-  getComments();
   fetch(`${server}/${id}`, {
     method: "PATCH",
     headers: {
@@ -74,30 +78,15 @@ async function DisLike(id) {
       score: data.value.find((comment) => comment.id === id).score - 1,
     }),
   });
+  getComments();
 }
 
-//add a like counter to the comments
-
-// function addComments() {
-//   console.log("test");
-//   data.comments.value.push({
-//     id: Date.now().toString(16),
-//     content: commentInput.value,
-//     createdAt: new Date().toLocaleString(),
-//     score: 0,
-//     user: {
-//       username: "User",
-//       image: {
-//         png: "image-amyrobson.png",
-//         webp: "image-amyrobson.webp",
-//       },
-//       username: "User",
-//     },
-//     replies: [],
-//   });
-//   commentInput.value = "";
-//   console.log("test");
-// }
+function deleteComment(id) {
+  fetch(`${server}/${id}`, {
+    method: "DELETE",
+  });
+  getComments();
+}
 
 const newName = ref("");
 function setName() {
@@ -113,6 +102,7 @@ function setName() {
         <div
           class="text-black pa-10 text-center text-left flex flex-row rounded-lg my-3 bg-white min-h-45 items-center"
         >
+          <button @click="deleteComment(comment.id), getComments()">X</button>
           <div
             class="flex flex-col justify-center px-2 w-18 items-center h-27 rounded-lg mr-3 bg-[#f5f6fa] text-blue-900 font-semibold"
           >
@@ -218,7 +208,7 @@ function setName() {
         ></textarea>
         <button
           class="btn bg-blue-900 w-23 text-size-4.25"
-          @click="addComments"
+          @click="addComments, getComments()"
         >
           Send
         </button>
