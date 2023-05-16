@@ -19,7 +19,6 @@ onMounted(async () => {
 async function getComments() {
   const response = await fetch(server);
   data.value = await response.json();
-  console.log(data.value);
 }
 
 //make a function to add comments to the database using post
