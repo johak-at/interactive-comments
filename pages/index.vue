@@ -82,11 +82,12 @@ async function DisLike(id) {
 async function addSubLike(commentId, replyId) {
   await fetch(`${server}/${commentId}`, {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      score: data.value.find((comment) => comment.replies.id === replyId).score + 1,
+      score:
+        data.value
+          .find((comment) => comment.id === commentId)
+          .replies.find((reply) => reply.id === replyId).score + 1,
     }),
   });
   getComments();
@@ -110,10 +111,13 @@ function setName() {
   <div class="flex items-center flex-col text-black">
     <div class="flex flex-col w-2xl">
       <div v-for="(comment, index) in data" :key="comment.id">
-        <div class="text-black pa-10 text-center text-left flex flex-row rounded-lg my-3 bg-white min-h-45 items-center">
+        <div
+          class="text-black pa-10 text-center text-left flex flex-row rounded-lg my-3 bg-white min-h-45 items-center"
+        >
           <button @click="deleteComment(comment.id)">X</button>
           <div
-            class="flex flex-col justify-center px-2 w-18 items-center h-27 rounded-lg mr-3 bg-[#f5f6fa] text-blue-900 font-semibold">
+            class="flex flex-col justify-center px-2 w-18 items-center h-27 rounded-lg mr-3 bg-[#f5f6fa] text-blue-900 font-semibold"
+          >
             <button class="space-y-3.5">
               <Icon text-5 icon="ic:round-plus" @click="addLike(comment.id)" />
               <p>{{ comment.score }}</p>
@@ -131,8 +135,14 @@ function setName() {
                 </p>
               </div>
               <div class="ml-3">
-                <button class="flex flex-row text-blue-900 items-center font-semibold">
-                  <Icon text-5 icon="fa:mail-reply" class="text-blue-900 pr-1.5" />
+                <button
+                  class="flex flex-row text-blue-900 items-center font-semibold"
+                >
+                  <Icon
+                    text-5
+                    icon="fa:mail-reply"
+                    class="text-blue-900 pr-1.5"
+                  />
                   Reply
                 </button>
               </div>
@@ -141,14 +151,25 @@ function setName() {
           </div>
         </div>
 
-        <div v-for="reply in comment.replies"
-          class="text-black pa-10 text-center text-left flex flex-row rounded-lg my-3 bg-white min-h-45 items-center ml-18">
+        <div
+          v-for="reply in comment.replies"
+          class="text-black pa-10 text-center text-left flex flex-row rounded-lg my-3 bg-white min-h-45 items-center ml-18"
+        >
           <div
-            class="flex flex-col justify-center px-2 w-18 items-center h-27 rounded-lg mr-3 bg-[#f5f6fa] text-blue-900 font-semibold">
+            class="flex flex-col justify-center px-2 w-18 items-center h-27 rounded-lg mr-3 bg-[#f5f6fa] text-blue-900 font-semibold"
+          >
             <button class="space-y-3.5">
-              <Icon text-5 icon="ic:round-plus" @click="addSubLike(comment.id, reply.id)" />
+              <Icon
+                text-5
+                icon="ic:round-plus"
+                @click="addSubLike(comment.id, reply.id)"
+              />
               <p>{{ reply.score }}</p>
-              <Icon text-5 icon="ic:round-minus" @click="DisLike(comment.replies.id)" />
+              <Icon
+                text-5
+                icon="ic:round-minus"
+                @click="DisLike(comment.replies.id)"
+              />
             </button>
           </div>
           <div class="flex flex-col text-left">
@@ -167,10 +188,20 @@ function setName() {
       </div>
 
       <div
-        class="text-black pa-10 text-center text-left flex flex-row rounded-lg mt-3 mb-15 bg-white min-h-35 items-center justify-between">
-        <textarea name="comments" id="commentInput" placeholder="Add a comment..." maxrows="6" class="text"
-          @keyup.enter="addComments"></textarea>
-        <button class="btn bg-blue-900 w-23 text-size-4.25" @click="addComments">
+        class="text-black pa-10 text-center text-left flex flex-row rounded-lg mt-3 mb-15 bg-white min-h-35 items-center justify-between"
+      >
+        <textarea
+          name="comments"
+          id="commentInput"
+          placeholder="Add a comment..."
+          maxrows="6"
+          class="text"
+          @keyup.enter="addComments"
+        ></textarea>
+        <button
+          class="btn bg-blue-900 w-23 text-size-4.25"
+          @click="addComments"
+        >
           Send
         </button>
       </div>
