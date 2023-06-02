@@ -19,7 +19,64 @@
         },
         "username": "amyrobson"
       },
-      "replies": []
+      "replies": [
+        {
+          "createdAt": "2.6.2023, 10:17:12",
+          "score": 0,
+          "user": {
+            "username": "User",
+            "image": {
+              "png": "image-amyrobson.png",
+              "webp": "image-amyrobson.webp"
+            }
+          }
+        },
+        {
+          "createdAt": "2.6.2023, 10:21:12",
+          "score": 0,
+          "user": {
+            "image": {
+              "png": "image-amyrobson.png",
+              "webp": "image-amyrobson.webp"
+            },
+            "username": "User"
+          }
+        },
+        {
+          "content": "test",
+          "createdAt": "2.6.2023, 10:24:01",
+          "score": 0,
+          "user": {
+            "image": {
+              "png": "image-amyrobson.png",
+              "webp": "image-amyrobson.webp"
+            },
+            "username": "User"
+          }
+        },
+        {
+          "createdAt": "2.6.2023, 10:24:42",
+          "score": 0,
+          "user": {
+            "image": {
+              "png": "image-amyrobson.png",
+              "webp": "image-amyrobson.webp"
+            },
+            "username": "User"
+          }
+        },
+        {
+          "createdAt": "2.6.2023, 10:27:17",
+          "score": 0,
+          "user": {
+            "image": {
+              "png": "image-amyrobson.png",
+              "webp": "image-amyrobson.webp"
+            },
+            "username": "User"
+          }
+        }
+      ]
     },
     {
       "id": 2,
@@ -38,7 +95,7 @@
           "id": 3,
           "content": "If you're still new, I'd recommend focusing on the fundamentals of HTML, CSS, and JS before considering React. It's very tempting to jump ahead but lay a solid foundation first.",
           "createdAt": "1 week ago",
-          "score": 33,
+          "score": 35,
           "replyingTo": "maxblagun",
           "user": {
             "image": {
@@ -77,6 +134,20 @@
       },
       "replies": [],
       "id": 6
+    },
+    {
+      "content": "asd",
+      "createdAt": "2.6.2023, 10:26:37",
+      "score": 0,
+      "user": {
+        "image": {
+          "png": "image-amyrobson.png",
+          "webp": "image-amyrobson.webp"
+        },
+        "username": "User"
+      },
+      "replies": [],
+      "id": 7
     }
   ]
 }

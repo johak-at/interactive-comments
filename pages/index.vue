@@ -24,6 +24,7 @@ async function getComments() {
 //make a function to add comments to the database using post
 
 async function addComments() {
+  console.log(commentInput.value);
   if (commentInput.value === "") {
     return;
   }
@@ -38,7 +39,6 @@ async function addComments() {
       createdAt: new Date().toLocaleString(),
       score: 0,
       user: {
-        username: "User",
         image: {
           png: "image-amyrobson.png",
           webp: "image-amyrobson.webp",
@@ -49,6 +49,56 @@ async function addComments() {
     }),
   });
   commentInput.value = "";
+  getComments();
+}
+
+async function addReplies(id) {
+  console.log(replyInput.value);
+  if (replyInput.value === "") {
+    return;
+  }
+
+  // await fetch(server, {
+  //   method: "PUT",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({
+  //     content: replyInput.value,
+  //     createdAt: new Date().toLocaleString(),
+  //     score: 0,
+  //     user: {
+  //       username: "User",
+  //       image: {
+  //         png: "image-amyrobson.png",
+  //         webp: "image-amyrobson.webp",
+  //       },
+  //       username: "User",
+  //     }
+  //   }),
+  // });
+
+  data.value.find((comment) => comment.id === id).replies.push({
+    content: replyInput.value,
+    createdAt: new Date().toLocaleString(),
+    score: 0,
+    user: {
+      image: {
+        png: "image-amyrobson.png",
+        webp: "image-amyrobson.webp",
+      },
+      username: "User",
+    },
+  });
+  await fetch(`${server}/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(
+      data.value.find(comment => comment.id === id)
+    ),
+  });
+
+  replyInput.value = "";
   getComments();
 }
 
@@ -66,7 +116,7 @@ async function addLike(id) {
   });
   getComments();
 }
-async function DisLike(id) {
+async function addDisLike(id) {
   await fetch(`${server}/${id}`, {
     method: "PATCH",
     headers: {
@@ -79,7 +129,7 @@ async function DisLike(id) {
   getComments();
 }
 
-async function subLike(commentId, replyId) {
+async function addSubLike(commentId, replyId) {
   data.value.find((comment) => comment.id === commentId).replies.find(reply => reply.id === replyId).score += 1;
   await fetch(`${server}/${commentId}`, {
     method: "PUT",
@@ -91,7 +141,7 @@ async function subLike(commentId, replyId) {
   getComments();
 }
 
-async function subDislike(commentId, replyId) {
+async function addSubDislike(commentId, replyId) {
   data.value.find((comment) => comment.id === commentId).replies.find(reply => reply.id === replyId).score -= 1;
   await fetch(`${server}/${commentId}`, {
     method: "PUT",
@@ -128,10 +178,10 @@ function setName() {
             <button class="space-y-3.5">
               <Icon text-5 icon="ic:round-plus" @click="addLike(comment.id)" />
               <p>{{ comment.score }}</p>
-              <Icon text-5 icon="ic:round-minus" @click="DisLike(comment.id)" />
+              <Icon text-5 icon="ic:round-minus" @click="addDisLike(comment.id)" />
             </button>
           </div>
-          <div class="flex flex-col text-left">
+          <div class="flex flex-col text-left min-w-128">
             <div class="flex flex-row items-center justify-between pb-4">
               <div class="flex flex-row items-center">
                 <!-- load the profile pictures from the json file -->
@@ -157,9 +207,9 @@ function setName() {
           <div
             class="flex flex-col justify-center px-2 w-18 items-center h-27 rounded-lg mr-3 bg-[#f5f6fa] text-blue-900 font-semibold">
             <button class="space-y-3.5">
-              <Icon text-5 icon="ic:round-plus" @click="subLike(comment.id, reply.id)" />
+              <Icon text-5 icon="ic:round-plus" @click="addSubLike(comment.id, reply.id)" />
               <p>{{ reply.score }}</p>
-              <Icon text-5 icon="ic:round-minus" @click="subDislike(comment.id, reply.id)" />
+              <Icon text-5 icon="ic:round-minus" @click="addSubDislike(comment.id, reply.id)" />
             </button>
           </div>
           <div class="flex flex-col text-left">
@@ -174,6 +224,14 @@ function setName() {
             </div>
             <div class="pl-2">{{ reply.content }}</div>
           </div>
+        </div>
+        <div
+          class="text-black pa-10 text-center text-left flex flex-row rounded-lg mt-3 mb-15 bg-white min-h-35 items-center justify-between ml-18">
+          <textarea name="replies" id="replyInput" placeholder="Add a reply..." maxrows="6" class="text"
+            @keyup.enter="addReplies(comment.id)"></textarea>
+          <button class="btn bg-blue-900 w-23 text-size-4.25" @click="addReplies(comment.id)">
+            Send
+          </button>
         </div>
       </div>
 
