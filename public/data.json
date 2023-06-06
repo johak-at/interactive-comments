@@ -19,64 +19,7 @@
         },
         "username": "amyrobson"
       },
-      "replies": [
-        {
-          "createdAt": "2.6.2023, 10:17:12",
-          "score": 0,
-          "user": {
-            "username": "User",
-            "image": {
-              "png": "image-amyrobson.png",
-              "webp": "image-amyrobson.webp"
-            }
-          }
-        },
-        {
-          "createdAt": "2.6.2023, 10:21:12",
-          "score": 0,
-          "user": {
-            "image": {
-              "png": "image-amyrobson.png",
-              "webp": "image-amyrobson.webp"
-            },
-            "username": "User"
-          }
-        },
-        {
-          "content": "test",
-          "createdAt": "2.6.2023, 10:24:01",
-          "score": 0,
-          "user": {
-            "image": {
-              "png": "image-amyrobson.png",
-              "webp": "image-amyrobson.webp"
-            },
-            "username": "User"
-          }
-        },
-        {
-          "createdAt": "2.6.2023, 10:24:42",
-          "score": 0,
-          "user": {
-            "image": {
-              "png": "image-amyrobson.png",
-              "webp": "image-amyrobson.webp"
-            },
-            "username": "User"
-          }
-        },
-        {
-          "createdAt": "2.6.2023, 10:27:17",
-          "score": 0,
-          "user": {
-            "image": {
-              "png": "image-amyrobson.png",
-              "webp": "image-amyrobson.webp"
-            },
-            "username": "User"
-          }
-        }
-      ]
+      "replies": []
     },
     {
       "id": 2,
@@ -132,7 +75,20 @@
         },
         "username": "seiwaldm"
       },
-      "replies": [],
+      "replies": [
+        {
+          "content": "Test",
+          "createdAt": "6.6.2023, 11:21:00",
+          "score": 4,
+          "user": {
+            "image": {
+              "png": "image-amyrobson.png",
+              "webp": "image-amyrobson.webp"
+            },
+            "username": "User"
+          }
+        }
+      ],
       "id": 6
     },
     {
@@ -148,6 +104,47 @@
       },
       "replies": [],
       "id": 7
+    },
+    {
+      "content": "lkjlkj",
+      "createdAt": "6.6.2023, 09:56:53",
+      "score": 0,
+      "user": {
+        "image": {
+          "png": "image-amyrobson.png",
+          "webp": "image-amyrobson.webp"
+        },
+        "username": "User"
+      },
+      "replies": [
+        {
+          "id": "8y9nu871y",
+          "content": "test",
+          "createdAt": "6.6.2023, 11:22:20",
+          "score": 14,
+          "user": {
+            "image": {
+              "png": "image-amyrobson.png",
+              "webp": "image-amyrobson.webp"
+            },
+            "username": "User"
+          }
+        },
+        {
+          "id": "y8ppk8lwz",
+          "content": "testorino",
+          "createdAt": "6.6.2023, 11:22:28",
+          "score": -7,
+          "user": {
+            "image": {
+              "png": "image-amyrobson.png",
+              "webp": "image-amyrobson.webp"
+            },
+            "username": "User"
+          }
+        }
+      ],
+      "id": 8
     }
   ]
 }

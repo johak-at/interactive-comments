@@ -2,6 +2,7 @@
 import { useStore } from "~/store/store";
 import { storeToRefs } from "pinia";
 import { Icon } from "@iconify/vue";
+import ReplyField from "~/components/ui/ReplyField.vue";
 
 // useStore() and name handling:
 const store = useStore();
@@ -49,56 +50,6 @@ async function addComments() {
     }),
   });
   commentInput.value = "";
-  getComments();
-}
-
-async function addReplies(id) {
-  console.log(replyInput.value);
-  if (replyInput.value === "") {
-    return;
-  }
-
-  // await fetch(server, {
-  //   method: "PUT",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({
-  //     content: replyInput.value,
-  //     createdAt: new Date().toLocaleString(),
-  //     score: 0,
-  //     user: {
-  //       username: "User",
-  //       image: {
-  //         png: "image-amyrobson.png",
-  //         webp: "image-amyrobson.webp",
-  //       },
-  //       username: "User",
-  //     }
-  //   }),
-  // });
-
-  data.value.find((comment) => comment.id === id).replies.push({
-    content: replyInput.value,
-    createdAt: new Date().toLocaleString(),
-    score: 0,
-    user: {
-      image: {
-        png: "image-amyrobson.png",
-        webp: "image-amyrobson.webp",
-      },
-      username: "User",
-    },
-  });
-  await fetch(`${server}/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(
-      data.value.find(comment => comment.id === id)
-    ),
-  });
-
-  replyInput.value = "";
   getComments();
 }
 
@@ -160,6 +111,13 @@ function deleteComment(id) {
   getComments();
 }
 
+function deleteReply(id) {
+  fetch(`${server}/${id}`, {
+    method: "DELETE",
+  });
+  getComments();
+}
+
 const newName = ref("");
 function setName() {
   store.name = newName.value;
@@ -192,7 +150,8 @@ function setName() {
                 </p>
               </div>
               <div class="ml-3">
-                <button class="flex flex-row text-blue-900 items-center font-semibold">
+                <button :value="comment.id" class="flex flex-row text-blue-900 items-center font-semibold"
+                  @click="displayReplyField">
                   <Icon text-5 icon="fa:mail-reply" class="text-blue-900 pr-1.5" />
                   Reply
                 </button>
@@ -225,14 +184,7 @@ function setName() {
             <div class="pl-2">{{ reply.content }}</div>
           </div>
         </div>
-        <div
-          class="text-black pa-10 text-center text-left flex flex-row rounded-lg mt-3 mb-15 bg-white min-h-35 items-center justify-between ml-18">
-          <textarea name="replies" id="replyInput" placeholder="Add a reply..." maxrows="6" class="text"
-            @keyup.enter="addReplies(comment.id)"></textarea>
-          <button class="btn bg-blue-900 w-23 text-size-4.25" @click="addReplies(comment.id)">
-            Send
-          </button>
-        </div>
+        <ReplyField :commentId="comment.id" :data="data" :server="server"></ReplyField>
       </div>
 
       <div
