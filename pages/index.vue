@@ -3,6 +3,7 @@ import { useStore } from "~/store/store";
 import { storeToRefs } from "pinia";
 import { Icon } from "@iconify/vue";
 import ReplyField from "~/components/ui/ReplyField.vue";
+//import LoginRegister from "~/components/ui/LoginRegister.vue";
 
 // useStore() and name handling:
 const store = useStore();
@@ -56,39 +57,64 @@ async function addComments() {
 //make a function to be able to like comments when clicking the + icon use the id of the icon
 
 async function addLike(id) {
-  await fetch(`${server}/${id}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      score: data.value.find((comment) => comment.id === id).score + 1,
-    }),
-  });
+  if (data.value.find((comment) => comment.id === id).rated != 1) {
+    await fetch(`${server}/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        score: data.value.find((comment) => comment.id === id).score + 1,
+        rated: 1,
+      }),
+    });
+
+  }
+
+
+
   getComments();
 }
 async function addDisLike(id) {
-  await fetch(`${server}/${id}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      score: data.value.find((comment) => comment.id === id).score - 1,
-    }),
-  });
+  if (data.value.find((comment) => comment.id === id).rated != -1) {
+    await fetch(`${server}/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        score: data.value.find((comment) => comment.id === id).score - 1,
+        rated: -1,
+      }),
+    });
+  }
+
   getComments();
 }
 
 async function addSubLike(commentId, replyId) {
-  data.value.find((comment) => comment.id === commentId).replies.find(reply => reply.id === replyId).score += 1;
-  await fetch(`${server}/${commentId}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(
-      data.value.find(comment => comment.id === commentId)
-    ),
-  });
+  if (data.value.find((comment) => comment.id === commentId).replies.find(reply => reply.id === replyId).rated != 1) {
+    data.value.find((comment) => comment.id === commentId).replies.find(reply => reply.id === replyId).score += 1;
+    await fetch(`${server}/${commentId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(
+        data.value.find(comment => comment.id === commentId)
+      ),
+
+    });
+    await fetch(`${server}/${commentId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        rated: 1,
+      }
+
+      ),
+    });
+  }
+
+
   getComments();
 }
 
@@ -126,6 +152,7 @@ function setName() {
 </script>
 
 <template>
+  <!--<LoginRegister></LoginRegister>-->
   <div class="flex items-center flex-col text-black">
     <div class="flex flex-col w-2xl">
       <div v-for="(comment, index) in data" :key="comment.id">
