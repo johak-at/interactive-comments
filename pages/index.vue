@@ -108,17 +108,14 @@ async function addDisLike(id) {
 }
 
 async function addSubLike(commentId, replyId) {
+  const reply = data.value
+      .find((comment) => comment.id === commentId)
+      .replies.find((reply) => reply.id === replyId);
   if (
-    data.value
-      .find((comment) => comment.id === commentId)
-      .replies.find((reply) => reply.id === replyId).rated == -1
+    reply.rated == -1
   ) {
-    data.value
-      .find((comment) => comment.id === commentId)
-      .replies.find((reply) => reply.id === replyId).score += 1;
-    data.value
-      .find((comment) => comment.id === commentId)
-      .replies.find((reply) => reply.id === replyId).rated = 0;
+    reply.score += 1;
+    reply.rated = 0;
     await fetch(`${server}/${commentId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -127,16 +124,10 @@ async function addSubLike(commentId, replyId) {
       ),
     });
   } else if (
-    data.value
-      .find((comment) => comment.id === commentId)
-      .replies.find((reply) => reply.id === replyId).rated == 0
+    reply.rated == 0
   ) {
-    data.value
-      .find((comment) => comment.id === commentId)
-      .replies.find((reply) => reply.id === replyId).score += 1;
-    data.value
-      .find((comment) => comment.id === commentId)
-      .replies.find((reply) => reply.id === replyId).rated = 1;
+    reply.score += 1;
+    reply.rated = 1;
     await fetch(`${server}/${commentId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -150,17 +141,14 @@ async function addSubLike(commentId, replyId) {
 }
 
 async function addSubDislike(commentId, replyId) {
+  const reply = data.value
+      .find((comment) => comment.id === commentId)
+      .replies.find((reply) => reply.id === replyId);
   if (
-    data.value
-      .find((comment) => comment.id === commentId)
-      .replies.find((reply) => reply.id === replyId).rated == 0
+    reply.rated == 0
   ) {
-    data.value
-      .find((comment) => comment.id === commentId)
-      .replies.find((reply) => reply.id === replyId).score -= 1;
-    data.value
-      .find((comment) => comment.id === commentId)
-      .replies.find((reply) => reply.id === replyId).rated = -1;
+    reply.score -= 1;
+    reply.rated = -1;
     await fetch(`${server}/${commentId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -169,16 +157,10 @@ async function addSubDislike(commentId, replyId) {
       ),
     });
   } else if (
-    data.value
-      .find((comment) => comment.id === commentId)
-      .replies.find((reply) => reply.id === replyId).rated == 1
+    reply.rated == 1
   ) {
-    data.value
-      .find((comment) => comment.id === commentId)
-      .replies.find((reply) => reply.id === replyId).score -= 1;
-    data.value
-      .find((comment) => comment.id === commentId)
-      .replies.find((reply) => reply.id === replyId).rated = 0;
+    reply.score -= 1;
+    reply.rated = 0;
     await fetch(`${server}/${commentId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -225,7 +207,6 @@ function setName() {
 
 <template>
   <input type="text" v-model="username" class="text-[#f5f6fa]"> 
-  <Button>Submit</Button>
 
   <div class="flex items-center flex-col text-black">
     <div class="flex flex-col w-2xl">
