@@ -3,7 +3,7 @@ import { useStore } from "~/store/store";
 import { storeToRefs } from "pinia";
 import { Icon } from "@iconify/vue";
 import ReplyField from "~/components/ui/ReplyField.vue";
-//import LoginRegister from "~/components/ui/LoginRegister.vue";
+import LoginRegister from "~/components/ui/LoginRegister.vue";
 
 // useStore() and name handling:
 const store = useStore();
@@ -38,6 +38,7 @@ async function addComments() {
     },
     body: JSON.stringify({
       content: commentInput.value,
+      rated: 0,
       createdAt: new Date().toLocaleString(),
       score: 0,
       user: {
@@ -57,7 +58,18 @@ async function addComments() {
 //make a function to be able to like comments when clicking the + icon use the id of the icon
 
 async function addLike(id) {
-  if (data.value.find((comment) => comment.id === id).rated != 1) {
+  if (data.value.find((comment) => comment.id === id).rated == -1) {
+    await fetch(`${server}/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        score: data.value.find((comment) => comment.id === id).score + 1,
+        rated: 0,
+      }),
+    });
+  } else if (data.value.find((comment) => comment.id === id).rated == 0) {
     await fetch(`${server}/${id}`, {
       method: "PATCH",
       headers: {
@@ -68,15 +80,12 @@ async function addLike(id) {
         rated: 1,
       }),
     });
-
   }
-
-
 
   getComments();
 }
 async function addDisLike(id) {
-  if (data.value.find((comment) => comment.id === id).rated != -1) {
+  if (data.value.find((comment) => comment.id === id).rated == 0) {
     await fetch(`${server}/${id}`, {
       method: "PATCH",
       headers: {
@@ -89,45 +98,103 @@ async function addDisLike(id) {
     });
   }
 
+  if (data.value.find((comment) => comment.id === id).rated == 1) {
+    await fetch(`${server}/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        score: data.value.find((comment) => comment.id === id).score - 1,
+        rated: 0,
+      }),
+    });
+  }
+
   getComments();
 }
 
 async function addSubLike(commentId, replyId) {
-  if (data.value.find((comment) => comment.id === commentId).replies.find(reply => reply.id === replyId).rated != 1) {
-    data.value.find((comment) => comment.id === commentId).replies.find(reply => reply.id === replyId).score += 1;
+  if (
+    data.value
+      .find((comment) => comment.id === commentId)
+      .replies.find((reply) => reply.id === replyId).rated == -1
+  ) {
+    data.value
+      .find((comment) => comment.id === commentId)
+      .replies.find((reply) => reply.id === replyId).score += 1;
+    data.value
+      .find((comment) => comment.id === commentId)
+      .replies.find((reply) => reply.id === replyId).rated = 0;
     await fetch(`${server}/${commentId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(
-        data.value.find(comment => comment.id === commentId)
+        data.value.find((comment) => comment.id === commentId)
       ),
-
     });
+  } else if (
+    data.value
+      .find((comment) => comment.id === commentId)
+      .replies.find((reply) => reply.id === replyId).rated == 0
+  ) {
+    data.value
+      .find((comment) => comment.id === commentId)
+      .replies.find((reply) => reply.id === replyId).score += 1;
+    data.value
+      .find((comment) => comment.id === commentId)
+      .replies.find((reply) => reply.id === replyId).rated = 1;
     await fetch(`${server}/${commentId}`, {
-      method: "PATCH",
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        rated: 1,
-      }
-
+      body: JSON.stringify(
+        data.value.find((comment) => comment.id === commentId)
       ),
     });
   }
-
 
   getComments();
 }
 
 async function addSubDislike(commentId, replyId) {
-  data.value.find((comment) => comment.id === commentId).replies.find(reply => reply.id === replyId).score -= 1;
-  await fetch(`${server}/${commentId}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(
-      data.value.find(comment => comment.id === commentId)
-    ),
-  });
-  getComments();
+  if (
+    data.value
+      .find((comment) => comment.id === commentId)
+      .replies.find((reply) => reply.id === replyId).rated == 0
+  ) {
+    data.value
+      .find((comment) => comment.id === commentId)
+      .replies.find((reply) => reply.id === replyId).score -= 1;
+    data.value
+      .find((comment) => comment.id === commentId)
+      .replies.find((reply) => reply.id === replyId).rated = -1;
+    await fetch(`${server}/${commentId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(
+        data.value.find((comment) => comment.id === commentId)
+      ),
+    });
+  } else if (
+    data.value
+      .find((comment) => comment.id === commentId)
+      .replies.find((reply) => reply.id === replyId).rated == 1
+  ) {
+    data.value
+      .find((comment) => comment.id === commentId)
+      .replies.find((reply) => reply.id === replyId).score -= 1;
+    data.value
+      .find((comment) => comment.id === commentId)
+      .replies.find((reply) => reply.id === replyId).rated = 0;
+    await fetch(`${server}/${commentId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(
+        data.value.find((comment) => comment.id === commentId)
+      ),
+    });
+    getComments();
+  }
 }
 
 function deleteComment(id) {
@@ -149,21 +216,32 @@ function setName() {
   store.name = newName.value;
   newName.value = "";
 }
+let showReplyField = ref(false);
+function displayReplyField() {
+  showReplyField.value = !showReplyField.value;
+}
 </script>
 
 <template>
-  <!--<LoginRegister></LoginRegister>-->
+  <!-- <LoginRegister></LoginRegister> -->
   <div class="flex items-center flex-col text-black">
     <div class="flex flex-col w-2xl">
       <div v-for="(comment, index) in data" :key="comment.id">
-        <div class="text-black pa-10 text-center text-left flex flex-row rounded-lg my-3 bg-white min-h-45 items-center">
+        <div
+          class="text-black pa-10 text-center text-left flex flex-row rounded-lg my-3 bg-white min-h-45 items-center"
+        >
           <button @click="deleteComment(comment.id)">X</button>
           <div
-            class="flex flex-col justify-center px-2 w-18 items-center h-27 rounded-lg mr-3 bg-[#f5f6fa] text-blue-900 font-semibold">
+            class="flex flex-col justify-center px-2 w-18 items-center h-27 rounded-lg mr-3 bg-[#f5f6fa] text-blue-900 font-semibold"
+          >
             <button class="space-y-3.5">
               <Icon text-5 icon="ic:round-plus" @click="addLike(comment.id)" />
               <p>{{ comment.score }}</p>
-              <Icon text-5 icon="ic:round-minus" @click="addDisLike(comment.id)" />
+              <Icon
+                text-5
+                icon="ic:round-minus"
+                @click="addDisLike(comment.id)"
+              />
             </button>
           </div>
           <div class="flex flex-col text-left min-w-128">
@@ -177,9 +255,16 @@ function setName() {
                 </p>
               </div>
               <div class="ml-3">
-                <button :value="comment.id" class="flex flex-row text-blue-900 items-center font-semibold"
-                  @click="displayReplyField">
-                  <Icon text-5 icon="fa:mail-reply" class="text-blue-900 pr-1.5" />
+                <button
+                  :value="comment.id"
+                  class="flex flex-row text-blue-900 items-center font-semibold"
+                  @click="displayReplyField"
+                >
+                  <Icon
+                    text-5
+                    icon="fa:mail-reply"
+                    class="text-blue-900 pr-1.5"
+                  />
                   Reply
                 </button>
               </div>
@@ -188,14 +273,25 @@ function setName() {
           </div>
         </div>
 
-        <div v-for="reply in comment.replies"
-          class="text-black pa-10 text-center text-left flex flex-row rounded-lg my-3 bg-white min-h-45 items-center ml-18">
+        <div
+          v-for="reply in comment.replies"
+          class="text-black pa-10 text-center text-left flex flex-row rounded-lg my-3 bg-white min-h-45 items-center ml-18"
+        >
           <div
-            class="flex flex-col justify-center px-2 w-18 items-center h-27 rounded-lg mr-3 bg-[#f5f6fa] text-blue-900 font-semibold">
+            class="flex flex-col justify-center px-2 w-18 items-center h-27 rounded-lg mr-3 bg-[#f5f6fa] text-blue-900 font-semibold"
+          >
             <button class="space-y-3.5">
-              <Icon text-5 icon="ic:round-plus" @click="addSubLike(comment.id, reply.id)" />
+              <Icon
+                text-5
+                icon="ic:round-plus"
+                @click="addSubLike(comment.id, reply.id)"
+              />
               <p>{{ reply.score }}</p>
-              <Icon text-5 icon="ic:round-minus" @click="addSubDislike(comment.id, reply.id)" />
+              <Icon
+                text-5
+                icon="ic:round-minus"
+                @click="addSubDislike(comment.id, reply.id)"
+              />
             </button>
           </div>
           <div class="flex flex-col text-left">
@@ -211,14 +307,28 @@ function setName() {
             <div class="pl-2">{{ reply.content }}</div>
           </div>
         </div>
-        <ReplyField :commentId="comment.id" :data="data" :server="server"></ReplyField>
       </div>
+      <ReplyField
+        v-if="showReplyField"
+        :data="data"
+        :server="server"
+      ></ReplyField>
 
       <div
-        class="text-black pa-10 text-center text-left flex flex-row rounded-lg mt-3 mb-15 bg-white min-h-35 items-center justify-between">
-        <textarea name="comments" id="commentInput" placeholder="Add a comment..." maxrows="6" class="text"
-          @keyup.enter="addComments"></textarea>
-        <button class="btn bg-blue-900 w-23 text-size-4.25" @click="addComments">
+        class="text-black pa-10 text-center text-left flex flex-row rounded-lg mt-3 mb-15 bg-white min-h-35 items-center justify-between"
+      >
+        <textarea
+          name="comments"
+          id="commentInput"
+          placeholder="Add a comment..."
+          maxrows="6"
+          class="text"
+          @keyup.enter="addComments"
+        ></textarea>
+        <button
+          class="btn bg-blue-900 w-23 text-size-4.25"
+          @click="addComments"
+        >
           Send
         </button>
       </div>
