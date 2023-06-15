@@ -204,12 +204,12 @@ function deleteComment(id) {
   getComments();
 }
 
-function deleteReply(id) {
-  fetch(`${server}/${id}`, {
-    method: "DELETE",
-  });
-  getComments();
-}
+// function deleteReply(id) {
+//   fetch(`${server}/${id}`, {
+//     method: "DELETE",
+//   });
+//   getComments();
+// }
 
 const newName = ref("");
 function setName() {
