@@ -5,14 +5,10 @@ import { Icon } from "@iconify/vue";
 import ReplyField from "~/components/ui/ReplyField.vue";
 import LoginRegister from "~/components/ui/LoginRegister.vue";
 
-// useStore() and name handling:
 const store = useStore();
 const name = storeToRefs(store).name;
 const server = "http://localhost:3333/comments";
 let username = ref("");
-// const data = storeToRefs(store).data;
-
-//add the data of data.json to a new array using onMounted() and log the date of the comments
 
 const data = ref([]);
 onMounted(async () => {
@@ -24,7 +20,6 @@ async function getComments() {
   data.value = await response.json();
 }
 
-//make a function to add comments to the database using post
 
 async function addComments() {
   console.log(commentInput.value);
@@ -55,8 +50,6 @@ async function addComments() {
   commentInput.value = "";
   getComments();
 }
-
-//make a function to be able to like comments when clicking the + icon use the id of the icon
 
 async function addLike(id) {
   if (data.value.find((comment) => comment.id === id).rated == -1) {
@@ -234,7 +227,7 @@ function setName() {
 <template>
   <input type="text" v-model="username" class="text-[#f5f6fa]"> 
   <Button>Submit</Button>
-  <!-- <LoginRegister></LoginRegister> -->
+
   <div class="flex items-center flex-col text-black">
     <div class="flex flex-col w-2xl">
       <div v-for="comment in data" :key="comment.id">
@@ -264,7 +257,7 @@ function setName() {
           <div class="flex flex-col text-left ml-6 ">
             <div class="flex flex-row items-center justify-between pb-4 min-w-128">
               <div class="flex flex-row items-center">
-                <!-- load the profile pictures from the json file -->
+
                 <img :src="comment.user.image.webp" class="w-10 pl-2" />
                 <p class="ml-3 font-medium">{{ comment.user.username }}</p>
                 <p class="ml-3 italic text-gray-600">
