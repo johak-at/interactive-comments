@@ -69,9 +69,9 @@
     },
     {
       "content": "Hallo!",
-      "rated": 0,
+      "rated": 1,
       "createdAt": "today",
-      "score": 956,
+      "score": 37,
       "user": {
         "image": {
           "png": "http://robohash.org/seiwaldm",
@@ -81,10 +81,10 @@
       },
       "replies": [
         {
-          "id": "lvqs9z8ry",
+          "id": "fy5pn98v3",
           "rated": 0,
-          "content": "gdgdf\n",
-          "createdAt": "15.6.2023, 20:14:25",
+          "content": "Hallo",
+          "createdAt": "2023. 06. 15. 20:31:30",
           "score": 0,
           "user": {
             "image": {

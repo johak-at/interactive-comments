@@ -1,5 +1,5 @@
 <script setup>
-const prop = defineProps(["commentId", "data", "server"]);
+const prop = defineProps(["commentId", "data", "server", "username"]);
 const text = ref("");
 let showTextarea = ref(false);
 async function addReplies() {
@@ -20,7 +20,7 @@ async function addReplies() {
           png: "image-amyrobson.png",
           webp: "image-amyrobson.webp",
         },
-        username: "User",
+        username: prop.username,
       },
     });
   console.log(prop.commentId);
@@ -36,6 +36,7 @@ async function addReplies() {
 }
 </script>
 <template>
+  
   <div v-if="showTextarea==false">
     <button class="btn text-black bg-white w-23 text-size-4.25 ml-18 min-w-150" @click="showTextarea=true">Reply</button>
   </div>

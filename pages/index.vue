@@ -9,6 +9,7 @@ import LoginRegister from "~/components/ui/LoginRegister.vue";
 const store = useStore();
 const name = storeToRefs(store).name;
 const server = "http://localhost:3333/comments";
+let username = ref("");
 // const data = storeToRefs(store).data;
 
 //add the data of data.json to a new array using onMounted() and log the date of the comments
@@ -46,7 +47,7 @@ async function addComments() {
           png: "image-amyrobson.png",
           webp: "image-amyrobson.webp",
         },
-        username: "User",
+        username: username.value,
       },
       replies: [],
     }),
@@ -231,6 +232,8 @@ function setName() {
 </script>
 
 <template>
+  <input type="text" v-model="username" class="text-[#f5f6fa]"> 
+  <Button>Submit</Button>
   <!-- <LoginRegister></LoginRegister> -->
   <div class="flex items-center flex-col text-black">
     <div class="flex flex-col w-2xl">
@@ -258,8 +261,8 @@ function setName() {
               />
             </button>
           </div>
-          <div class="flex flex-col text-left min-w-128">
-            <div class="flex flex-row items-center justify-between pb-4">
+          <div class="flex flex-col text-left ml-6 ">
+            <div class="flex flex-row items-center justify-between pb-4 min-w-128">
               <div class="flex flex-row items-center">
                 <!-- load the profile pictures from the json file -->
                 <img :src="comment.user.image.webp" class="w-10 pl-2" />
@@ -284,8 +287,7 @@ function setName() {
 
         <div
           v-for="reply in comment.replies"
-          class="text-black pa-10 text-center text-left flex flex-row rounded-lg my-3 bg-white min-h-45 items-center ml-18"
-        >
+          class="text-black pa-10 text-center text-left flex flex-row rounded-lg my-3 bg-white min-h-45 items-center ml-18">
           <div
             class="flex flex-col justify-center px-2 w-18 items-center h-27 rounded-lg mr-3 bg-[#f5f6fa] text-blue-900 font-semibold"
           >
@@ -316,7 +318,7 @@ function setName() {
             </button>
           </div>
           <div class="flex flex-col text-left">
-            <div class="flex flex-row items-center justify-between pb-4">
+            <div class="flex flex-row items-center justify-between pb-4 min-w-118">
               <div class="flex flex-row items-center">
                 <img :src="reply.user.image.webp" class="w-10 pl-2" />
                 <p class="ml-3 font-medium">{{ reply.user.username }}</p>
@@ -341,6 +343,7 @@ function setName() {
         :commentId="comment.id"
         :data="data"
         :server="server"
+        :username="username"
       ></ReplyField>
       </div>
       
@@ -368,9 +371,7 @@ function setName() {
 </template>
 
 <style>
-* {
-  /* border: 1px solid red; */
-}
+
 
 .text {
   border: 1px solid #c8ccda;
