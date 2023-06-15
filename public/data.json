@@ -9,9 +9,9 @@
     {
       "id": 1,
       "content": "Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You've nailed the design and the responsiveness at various breakpoints works really well.",
-      "rated": 1,
+      "rated": 0,
       "createdAt": "1 month ago",
-      "score": 41,
+      "score": 40,
       "user": {
         "image": {
           "png": "/images/avatars/image-amyrobson.png",
@@ -25,7 +25,7 @@
       "id": 2,
       "content": "Woah, your project looks awesome! How long have you been coding for? I'm still new, but think I want to dive into React as well soon. Perhaps you can give me an insight on where I can learn React? Thanks!",
       "createdAt": "2 weeks ago",
-      "score": 25,
+      "score": 26,
       "user": {
         "image": {
           "png": "./images/avatars/image-maxblagun.png",
@@ -36,10 +36,10 @@
       "replies": [
         {
           "id": 3,
-          "rated": -1,
+          "rated": 0,
           "content": "If you're still new, I'd recommend focusing on the fundamentals of HTML, CSS, and JS before considering React. It's very tempting to jump ahead but lay a solid foundation first.",
           "createdAt": "1 week ago",
-          "score": 77,
+          "score": 78,
           "replyingTo": "maxblagun",
           "user": {
             "image": {
@@ -65,7 +65,7 @@
           }
         }
       ],
-      "rated": -1
+      "rated": 0
     },
     {
       "content": "Hallo!",
@@ -81,38 +81,11 @@
       },
       "replies": [
         {
-          "content": "Test",
-          "rated": -1,
-          "createdAt": "6.6.2023, 11:21:00",
-          "score": 6,
-          "user": {
-            "image": {
-              "png": "image-amyrobson.png",
-              "webp": "image-amyrobson.webp"
-            },
-            "username": "User"
-          }
-        },
-        {
-          "id": "dbu0jh7hh",
+          "id": "lvqs9z8ry",
           "rated": 0,
-          "content": "gf\n",
-          "createdAt": "2023. 06. 15. 9:40:01",
+          "content": "gdgdf\n",
+          "createdAt": "15.6.2023, 20:14:25",
           "score": 0,
-          "user": {
-            "image": {
-              "png": "image-amyrobson.png",
-              "webp": "image-amyrobson.webp"
-            },
-            "username": "User"
-          }
-        },
-        {
-          "id": "yq9ug8c59",
-          "rated": 1,
-          "content": "test\n",
-          "createdAt": "2023. 06. 15. 9:40:26",
-          "score": 1,
           "user": {
             "image": {
               "png": "image-amyrobson.png",
@@ -123,136 +96,6 @@
         }
       ],
       "id": 6
-    },
-    {
-      "content": "lkjlkj",
-      "rated": -1,
-      "createdAt": "6.6.2023, 09:56:53",
-      "score": 0,
-      "user": {
-        "image": {
-          "png": "image-amyrobson.png",
-          "webp": "image-amyrobson.webp"
-        },
-        "username": "User"
-      },
-      "replies": [
-        {
-          "id": "8y9nu871y",
-          "content": "test",
-          "rated": -1,
-          "createdAt": "6.6.2023, 11:22:20",
-          "score": 16,
-          "user": {
-            "image": {
-              "png": "image-amyrobson.png",
-              "webp": "image-amyrobson.webp"
-            },
-            "username": "User"
-          }
-        },
-        {
-          "id": "y8ppk8lwz",
-          "content": "testorino",
-          "rated": -1,
-          "createdAt": "6.6.2023, 11:22:28",
-          "score": -8,
-          "user": {
-            "image": {
-              "png": "image-amyrobson.png",
-              "webp": "image-amyrobson.webp"
-            },
-            "username": "User"
-          }
-        },
-        {
-          "id": "lbkm9omf8",
-          "content": "lol",
-          "rated": 1,
-          "createdAt": "13.6.2023, 09:31:57",
-          "score": 1,
-          "user": {
-            "image": {
-              "png": "image-amyrobson.png",
-              "webp": "image-amyrobson.webp"
-            },
-            "username": "User"
-          }
-        },
-        {
-          "id": "hotaxzhnr",
-          "rated": -1,
-          "content": "sda",
-          "createdAt": "2023. 06. 15. 9:19:30",
-          "score": -1,
-          "user": {
-            "image": {
-              "png": "image-amyrobson.png",
-              "webp": "image-amyrobson.webp"
-            },
-            "username": "User"
-          }
-        },
-        {
-          "id": "u8wf4peez",
-          "rated": 0,
-          "content": "asd",
-          "createdAt": "2023. 06. 15. 9:39:53",
-          "score": 0,
-          "user": {
-            "image": {
-              "png": "image-amyrobson.png",
-              "webp": "image-amyrobson.webp"
-            },
-            "username": "User"
-          }
-        }
-      ],
-      "id": 8
-    },
-    {
-      "content": "asd\n",
-      "rated": 1,
-      "createdAt": "2023. 06. 15. 9:19:51",
-      "score": 1,
-      "user": {
-        "image": {
-          "png": "image-amyrobson.png",
-          "webp": "image-amyrobson.webp"
-        },
-        "username": "User"
-      },
-      "replies": [
-        {
-          "id": "gcpvqkhyn",
-          "rated": 1,
-          "content": "fsad",
-          "createdAt": "2023. 06. 15. 9:39:57",
-          "score": 1,
-          "user": {
-            "image": {
-              "png": "image-amyrobson.png",
-              "webp": "image-amyrobson.webp"
-            },
-            "username": "User"
-          }
-        },
-        {
-          "id": "oyndtwzzv",
-          "rated": 1,
-          "content": "dsfnsd.mn\n",
-          "createdAt": "2023. 06. 15. 14:05:36",
-          "score": 1,
-          "user": {
-            "image": {
-              "png": "image-amyrobson.png",
-              "webp": "image-amyrobson.webp"
-            },
-            "username": "User"
-          }
-        }
-      ],
-      "id": 9
     }
   ]
 }

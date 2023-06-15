@@ -1,6 +1,7 @@
 <script setup>
 const prop = defineProps(["commentId", "data", "server"]);
 const text = ref("");
+let showTextarea = ref(false);
 async function addReplies() {
   if (text.value === "") {
     return;
@@ -35,9 +36,13 @@ async function addReplies() {
 }
 </script>
 <template>
-  <div
+  <div v-if="showTextarea==false">
+    <button class="btn text-black bg-white w-23 text-size-4.25 ml-18 min-w-150" @click="showTextarea=true">Reply</button>
+  </div>
+  <div v-else
     class="text-black pa-10 text-center text-left flex flex-row rounded-lg mt-3 mb-15 bg-white min-h-35 items-center justify-between ml-18"
   >
+  <button @click="showTextarea=false">Hide Reply</button>
     <textarea
       name="replies"
       v-model="text"
@@ -46,7 +51,7 @@ async function addReplies() {
       class="text"
       @keyup.enter="addReplies"
     ></textarea>
-    <button class="btn bg-blue-900 w-23 text-size-4.25" @click="addReplies">
+    <button class="btn bg-blue-900 w-23 text-size-4.25 ml-2" @click="addReplies">
       Send
     </button>
   </div>

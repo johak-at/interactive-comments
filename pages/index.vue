@@ -197,28 +197,36 @@ async function addSubDislike(commentId, replyId) {
   }
 }
 
-function deleteComment(id) {
-  fetch(`${server}/${id}`, {
+async function deleteComment(id) {
+  await fetch(`${server}/${id}`, {
     method: "DELETE",
   });
   getComments();
 }
 
-// function deleteReply(id) {
-//   fetch(`${server}/${id}`, {
-//     method: "DELETE",
-//   });
-//   getComments();
-// }
+async function deleteReply(commentId, replyId) {
+  data.value
+    .find((comment) => comment.id === commentId)
+    .replies.splice(
+      data.value
+        .find((comment) => comment.id === commentId)
+        .replies.findIndex((reply) => reply.id === replyId),
+      1
+    );
+  await fetch(`${server}/${commentId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(
+      data.value.find((comment) => comment.id === commentId)
+    ),
+  });
+  getComments();
+}
 
 const newName = ref("");
 function setName() {
   store.name = newName.value;
   newName.value = "";
-}
-let showReplyField = ref(false);
-function displayReplyField() {
-  showReplyField.value = !showReplyField.value;
 }
 </script>
 
@@ -226,18 +234,24 @@ function displayReplyField() {
   <!-- <LoginRegister></LoginRegister> -->
   <div class="flex items-center flex-col text-black">
     <div class="flex flex-col w-2xl">
-      <div v-for="(comment, index) in data" :key="comment.id">
+      <div v-for="comment in data" :key="comment.id">
         <div
           class="text-black pa-10 text-center text-left flex flex-row rounded-lg my-3 bg-white min-h-45 items-center"
         >
-          <button @click="deleteComment(comment.id)">X</button>
           <div
             class="flex flex-col justify-center px-2 w-18 items-center h-27 rounded-lg mr-3 bg-[#f5f6fa] text-blue-900 font-semibold"
           >
             <button class="space-y-3.5">
-              <Icon text-5 icon="ic:round-plus" @click="addLike(comment.id)" />
+              <Icon v-if="comment.rated==1" text-5 icon="ic:round-plus" @click="addLike(comment.id)" class="text-red" />
+              <Icon v-else text-5 icon="ic:round-plus" @click="addLike(comment.id)" />
               <p>{{ comment.score }}</p>
-              <Icon
+              <Icon v-if="comment.rated==-1"
+                text-5
+                icon="ic:round-minus"
+                @click="addDisLike(comment.id)"
+                class="text-red"
+              />
+              <Icon v-else
                 text-5
                 icon="ic:round-minus"
                 @click="addDisLike(comment.id)"
@@ -257,15 +271,10 @@ function displayReplyField() {
               <div class="ml-3">
                 <button
                   :value="comment.id"
-                  class="flex flex-row text-blue-900 items-center font-semibold"
-                  @click="displayReplyField"
+                  class="btn btn-outline btn-error flex flex-row"
+                  @click="deleteComment(comment.id)"
                 >
-                  <Icon
-                    text-5
-                    icon="fa:mail-reply"
-                    class="text-blue-900 pr-1.5"
-                  />
-                  Reply
+                  Delete
                 </button>
               </div>
             </div>
@@ -281,13 +290,25 @@ function displayReplyField() {
             class="flex flex-col justify-center px-2 w-18 items-center h-27 rounded-lg mr-3 bg-[#f5f6fa] text-blue-900 font-semibold"
           >
             <button class="space-y-3.5">
-              <Icon
+              <Icon v-if="reply.rated==1"
+                text-5
+                icon="ic:round-plus"
+                @click="addSubLike(comment.id, reply.id)"
+                class="text-red"
+              />
+              <Icon v-else
                 text-5
                 icon="ic:round-plus"
                 @click="addSubLike(comment.id, reply.id)"
               />
               <p>{{ reply.score }}</p>
-              <Icon
+              <Icon v-if="reply.rated==-1"
+                text-5
+                icon="ic:round-minus"
+                @click="addSubDislike(comment.id, reply.id)"
+                class="text-red"
+              />
+              <Icon v-else
                 text-5
                 icon="ic:round-minus"
                 @click="addSubDislike(comment.id, reply.id)"
@@ -303,16 +324,26 @@ function displayReplyField() {
                   {{ reply.createdAt }}
                 </p>
               </div>
+              <div class="ml-3">
+                <button
+                  :value="comment.id"
+                  class="btn btn-outline btn-error flex flex-row"
+                  @click="deleteReply(comment.id, reply.id)"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
             <div class="pl-2">{{ reply.content }}</div>
           </div>
         </div>
-      </div>
-      <ReplyField
-        v-if="showReplyField"
+        <ReplyField
+        :commentId="comment.id"
         :data="data"
         :server="server"
       ></ReplyField>
+      </div>
+      
 
       <div
         class="text-black pa-10 text-center text-left flex flex-row rounded-lg mt-3 mb-15 bg-white min-h-35 items-center justify-between"
